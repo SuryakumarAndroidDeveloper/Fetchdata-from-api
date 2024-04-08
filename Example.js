@@ -11,7 +11,7 @@ import {
 // get data from this URL!
 const peopleURL = "https://swapi.dev/api/people/";
 
-const App = () => {
+const Example = () => {
   // managing state with 'useState'
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
@@ -23,7 +23,6 @@ const App = () => {
   const [eye_color, setEyeColor] = useState([]);
   const [birth_year, setBirthYear] = useState([]);
   const [gender, setGender] = useState([]);
-  const description ="The List Of Peoples Data"
 
   // similar to 'componentDidMount', gets called once
   useEffect(() => {
@@ -44,7 +43,25 @@ const App = () => {
       .finally(() => setLoading(false)); // change loading state
   }, []);
 
-
+  // Also get call asynchronous function
+  async function getMoviesAsync() {
+    try {
+      let response = await fetch(peopleURL);
+      let json = await response.json();
+      setData(json.results);
+      setName(json.name);
+      setHeight(json.height);
+      setMass(json.mass);
+      setHairColor(json.hair_color);
+      setSkinColor(json.skin_color);
+      setEyeColor(json.eye_color);
+      setBirthYear(json.birth_year);
+      setGender(json.gender);
+      setLoading(false);
+    } catch (error) {
+      alert(error);
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -54,29 +71,22 @@ const App = () => {
       ) : (
         <View>
           {/* Title from URL */}
-          <Text style={styles.title}>{"The People Details List"}</Text>
-          {/* Display each people */}
+          <Text style={styles.title}>{name}</Text>
+          {/* Display each movie */}
           <View style={{ borderBottomWidth: 1, marginBottom: 12 }}></View>
           <FlatList
             data={data}
             keyExtractor={({ id }, index) => id}
             renderItem={({ item }) => (
               <View style={{ paddingBottom: 10 }}>
-                <Text style={styles.peopleText}>
-                  {item.id} Name: {item.name}, 
-                  Height: {item.height}, 
-                  Mass: {item.mass},
-                  Hair Color:{item.hair_color},
-                  Skin Color:{item.skin_color},
-                  Eye Color:{item.eye_color},
-                  Birth Year:{item.birth_year},
-                  Gender:{item.gender}
+                <Text style={styles.movieText}>
+                  {item.id}. {item.name}, {item.height}
                 </Text>
               </View>
             )}
           />
           {/* Show the description */}
-         <Text style={styles.description}>{description}</Text> 
+          <Text style={styles.description}>{height}</Text>
         </View>
       )}
     </SafeAreaView>
@@ -89,11 +99,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 48,
   },
-  peopleText: {
+  movieText: {
     fontSize: 26,
     fontWeight: "200",
-    justifyContent:"space-evenly",
-    
   },
   title: {
     fontSize: 32,
@@ -107,4 +115,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default Example;

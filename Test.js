@@ -1,3 +1,82 @@
+/* import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import axios from 'axios';
+
+const App = () => {
+  const [characters, setCharacters] = useState([]);
+
+  useEffect(() => {
+    const fetchCharacters = async () => {
+      try {
+        const response = await axios.get('https://swapi.dev/api/people/');
+        setCharacters(response.data.results);
+      } catch (error) {
+        console.error('Error fetching characters:', error);
+      }
+    };
+
+    fetchCharacters();
+  }, []);
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.header}>Star Wars Characters</Text>
+      <View>
+        {characters.map((character, index) => (
+          <Text key={index} style={styles.character}>
+            Name: {character.name}  
+            Height: {character.height}
+            Mass: {character.mass}
+            Hair Color: {character.hair_color}
+            Skin Color: {character.skin_color}
+            Eye Color: {character.eye_color}
+            Birth Year: {character.birth_year}
+            Gender: {character.gender}
+
+          </Text>
+        ))}
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  header: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  character: {
+    fontSize: 16,
+    marginBottom: 5,
+    display:"flex",
+    flexDirection:"column",
+    justifyContent:"space-evenly",
+    width:400
+    
+    
+  },
+});
+
+export default App; */
+
+
+
+
+
+
+
+
+
+
+
+
 import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
@@ -44,7 +123,25 @@ const App = () => {
       .finally(() => setLoading(false)); // change loading state
   }, []);
 
-
+  // Also get call asynchronous function
+  async function getMoviesAsync() {
+    try {
+      let response = await fetch(peopleURL);
+      let json = await response.json();
+      setData(json.results);
+      setName(json.name);
+      setHeight(json.height);
+      setMass(json.mass);
+      setHairColor(json.hair_color);
+      setSkinColor(json.skin_color);
+      setEyeColor(json.eye_color);
+      setBirthYear(json.birth_year);
+      setGender(json.gender);
+      setLoading(false);
+    } catch (error) {
+      alert(error);
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -55,22 +152,15 @@ const App = () => {
         <View>
           {/* Title from URL */}
           <Text style={styles.title}>{"The People Details List"}</Text>
-          {/* Display each people */}
+          {/* Display each movie */}
           <View style={{ borderBottomWidth: 1, marginBottom: 12 }}></View>
           <FlatList
             data={data}
             keyExtractor={({ id }, index) => id}
             renderItem={({ item }) => (
               <View style={{ paddingBottom: 10 }}>
-                <Text style={styles.peopleText}>
-                  {item.id} Name: {item.name}, 
-                  Height: {item.height}, 
-                  Mass: {item.mass},
-                  Hair Color:{item.hair_color},
-                  Skin Color:{item.skin_color},
-                  Eye Color:{item.eye_color},
-                  Birth Year:{item.birth_year},
-                  Gender:{item.gender}
+                <Text style={styles.movieText}>
+                  {item.id}. {item.name}, {item.height},{item.mass}
                 </Text>
               </View>
             )}
@@ -89,11 +179,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 48,
   },
-  peopleText: {
+  movieText: {
     fontSize: 26,
     fontWeight: "200",
-    justifyContent:"space-evenly",
-    
   },
   title: {
     fontSize: 32,
